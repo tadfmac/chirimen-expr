@@ -8,6 +8,10 @@ CHIRIMENに関する公式情報は下記を参照ください。
 - [CHIRIMEN Open Hardware 公式Webサイト](https://chirimen.org/)
 - [CHIRIMEN Open Hardware プロジェクト リポジトリ](https://github.com/chirimen-oh/)
 
+# 免責事項
+
+本リポジトリに掲載する情報を利用することで発生したトラブルや損失、損害に対して、本リポジトリ管理人(D.F.Mac. @TripArts Music)や、CHIRIMENコミュニティは一切責任を負いません。ご利用は利用者の責任において行ってください。
+
 # CHIRIMENのピンアサイン
 
 Web APIから利用可能な機能にフォーカスしたGPIOマップです。
