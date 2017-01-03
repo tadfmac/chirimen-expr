@@ -1,4 +1,4 @@
-# chirimen-lbr
+# chirimen-expr
 
 [CHIRIMEN (Echigo Rev.1)](https://www.switch-science.com/catalog/2833/) 実験用の野良設計ライブラリです。
 
