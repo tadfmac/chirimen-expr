@@ -1,0 +1,13 @@
+{
+  "name": "i2cTest(old) v0.1",
+  "description": "i2cTest(old)",
+  "type": "certified",
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "chirimen-oh",
+    "url": "https://github.com/chirimen-oh/"
+  },
+  "icons": {
+    "512": "/style/icons/i2ctest-512.png"
+  }
+}

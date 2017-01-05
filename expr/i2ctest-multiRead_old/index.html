@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+<title>i2c Test app (old)</title>
+<style>
+*{
+    box-sizing:border-box;
+    padding:0px;
+    margin:0px;
+}
+html,body,#main{
+    height:100%;
+}
+#main{
+    position:relative;
+}
+
+.title{
+    position:absolute;
+    text-align:center;
+    text-align:center;
+    top:0;
+    left:0;
+    right:0;
+    width:100%;
+    height:120px;
+    text-align:center;
+    font-size:120px;
+    vertical-align:middle;
+
+}
+#wrapdata{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    width:1600px;
+    height:700px;
+    display:block;
+    margin: auto;
+}
+.cap{
+    width:720px;
+    font-size:90px;
+    line-height:120px;
+    vertical-align:middle;
+    text-align:center;
+    float:left; 
+    background-color:cyan;
+    margin:20px;
+}
+.val{
+    width:760px;
+    font-size:90px;
+    line-height:120px;
+    vertical-align:middle;
+    text-align:center;
+    float:left;
+    background-color:pink;
+    margin:20px;
+}
+.valsmall{
+    width:160px;
+    font-size:70px;
+    line-height:120px;
+    vertical-align:middle;
+    text-align:center;
+    float:left;
+    background-color:pink;
+    margin:20px;
+}
+
+#fps{
+    position:fixed;
+    bottom:0px;
+    right:0px;
+    font-size:32px;
+    background-color:black;
+    color:white;
+}
+</style>
+</head>
+<body>
+  <div class="title">i2c Sequencial Read Test(old)</div>
+  <div id="wrapdata">
+    <div class="cap" id="cap0">readDevice:init</div><div class="val" id="data0">---</div>
+    <div class="cap" id="cap1">readDevice:init</div><div class="val" id="data1">---</div>
+    <div class="cap" id="cap2">read(data)</div>
+        <div class="valsmall" id="v1">---</div>
+        <div class="valsmall" id="v2">---</div>
+        <div class="valsmall" id="v3">---</div>
+        <div class="valsmall" id="v4">---</div>
+    <div class="cap" id="cap3">read(time)</div>
+        <div class="valsmall" id="t1">---</div>
+        <div class="valsmall" id="t2">---</div>
+        <div class="valsmall" id="t3">---</div>
+        <div class="valsmall" id="t4">---</div>
+    <div class="cap" id="cap4">write</div><div class="val" id="data2">---</div>
+  </div>
+<div id="fps">0</div>
+<div id="pixiview"></div>
+<script src="./js/minified.js"></script>
+<script src="./js/webi2c.js"></script>
+<script src="./js/i2ctest.js"></script>
+<script src="./js/main.js"></script>
+</body>
+</html>
