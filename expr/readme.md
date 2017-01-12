@@ -13,6 +13,7 @@ CHIRIMENのI2C機能を改善すべく実験中のアプリ、Polyfill、対抗�
 - [x] 5. 4.に関連して、同一デバイスに対して同一レジスター指定で同期的に複数回呼び出しを行なっても正しく呼び出したAPIの戻り値が得られるよう修正
 
 - [修正版ソースコード(検証用app, polyfill)](./i2ctest-multiRead/)
+- [SRF02のサンプル修正版](./i2ctest-SRF02/)
 - [対抗デバイスコード(Canzasi用スケッチ)](./Canzasi/)
 
 ※[野良イメージ](../img/) の最新版と併せて利用する必要があります。
@@ -24,7 +25,7 @@ PolyFillはオリジナル [club-wot/WebGPIO](https://github.com/club-wot/WebGPI
 
 ### Licence
 
-- [修正版ソースコード(検証用app, polyfill)](./i2ctest-multiRead/)及び[野良イメージ適用前の不具合確認用ソースコード](./i2ctest-multiRead_old/)に含まれるPolyfill(webi2c.js,worker.js,webi2c-p1.js,worker-p1.js)のライセンスについては、[club-wot/WebGPIO](https://github.com/club-wot/WebGPIO)を参照ください。
+- [修正版ソースコード(検証用app, polyfill)](./i2ctest-multiRead/)及び[野良イメージ適用前の不具合確認用ソースコード](./i2ctest-multiRead_old/)に含まれるPolyfill(webi2c.js,worker.js,webi2c-p1.js,worker-p1.js,webi2c-p2.js,worker.i2c-p2.js)のライセンスについては、[club-wot/WebGPIO](https://github.com/club-wot/WebGPIO)を参照ください。
 
 - [修正版ソースコード(検証用app, polyfill)](./i2ctest-multiRead/)及び[野良イメージ適用前の不具合確認用ソースコード](./i2ctest-multiRead_old/)に含まれるminified.jsは [minified.js](http://minifiedjs.com/)で配布されているものです。ライセンスについては配布元でご確認願います。
 
