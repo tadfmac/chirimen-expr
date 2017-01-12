@@ -32,7 +32,6 @@ SRF02.prototype = {
                 var err = {code:4, message:"out of range error: "+res+"cm"};
                 reject(err);
               }
-              resolve(res);
             },(err) => {
               console.log("SRF02.read: read16(0x02) error"+err.message);
               err.code = 3;
