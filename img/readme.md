@@ -24,6 +24,16 @@ I2CManagerのNative側実装のAPIパラメータを追加しているため、�
 
 [CHRMN-dfm20170104.img (ダウンロード)](http://chrmn.dfm.lrv.jp/img/CHRMN-dfm20170104.img.zip)
 
+## CHRMN-dfm20170104p (2017/01/16更新)
+
+CHRMN-dfm20170104に対して下記課題の修正を実施したものです。
+
+https://github.com/chirimen-oh/any-issues/issues/163
+
+WindowsからandroidToolsを利用してアップロードができるようになりました。
+
+[CHRMN-dfm20170104p.img (ダウンロード)](http://chrmn.dfm.lrv.jp/img/CHRMN-dfm20170104p.img.zip)
+
 ### Licence
 
 本バイナリは「[chirimen-oh](https://github.com/chirimen-oh)」で公開されているソフトウエアに改変を加え生成したものです。
