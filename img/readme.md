@@ -34,12 +34,19 @@ WindowsからandroidToolsを利用してアップロードができるように�
 
 [CHRMN-dfm20170104p.img (ダウンロード)](http://chrmn.dfm.lrv.jp/img/CHRMN-dfm20170104p.img.zip)
 
-## CHRMN-dfm20170117p (2017/01/17更新)
+## CHRMN-dfm20170117-2p (2017/01/17更新(2回目))
 
-CHRMN-dfm20170104に残っていたテスト用のコード（従来のAPIとは異なる新規APIのテスト）部分を削除したイメージです。従来のWeb I2C APIの動作については CHRMN-dfm20170104から変更はありません。
-また、このバイナリもWindowsからandroidToolsを利用してアップロードが可能です。
+CHRMN-dfm20170104に残っていたテスト用のコード（従来のAPIとは異なる新規APIのテスト）部分を削除したイメージです。
 
-[CHRMN-dfm20170117p.img (ダウンロード)](http://chrmn.dfm.lrv.jp/img/CHRMN-dfm20170117p.img.zip)
+本Ver.で
+
+> 1. I2CSlaveDevice生成後に呼び出すwrite,read系APIの実行時、I2CSlaveDevice生成時に指定したSlaveAddressを保証するよう修正（アプリ側で異なるデバイスのアクセス時に毎回I2CSlaveDeviceの生成からやり直さなくて良くなる）
+
+の修正が一部不完全だった問題を修正しています。
+
+このバイナリもWindowsからandroidToolsを利用してアップロードが可能です。
+
+[CHRMN-dfm20170117-2p.img (ダウンロード)](http://chrmn.dfm.lrv.jp/img/CHRMN-dfm20170117-2p.img.zip)
 
 ### Licence
 
