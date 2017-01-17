@@ -34,6 +34,13 @@ WindowsからandroidToolsを利用してアップロードができるように�
 
 [CHRMN-dfm20170104p.img (ダウンロード)](http://chrmn.dfm.lrv.jp/img/CHRMN-dfm20170104p.img.zip)
 
+## CHRMN-dfm20170117p (2017/01/17更新)
+
+CHRMN-dfm20170104に残っていたテスト用のコード（従来のAPIとは異なる新規APIのテスト）部分を削除したイメージです。従来のWeb I2C APIの動作については CHRMN-dfm20170104から変更はありません。
+また、このバイナリもWindowsからandroidToolsを利用してアップロードが可能です。
+
+[CHRMN-dfm20170117p.img (ダウンロード)](http://chrmn.dfm.lrv.jp/img/CHRMN-dfm20170117p.img.zip)
+
 ### Licence
 
 本バイナリは「[chirimen-oh](https://github.com/chirimen-oh)」で公開されているソフトウエアに改変を加え生成したものです。
