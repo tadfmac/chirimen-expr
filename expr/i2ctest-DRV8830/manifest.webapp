@@ -1,0 +1,13 @@
+{
+  "name": "i2c-DRV8830(for beta firmware)",
+  "description": "motor driver DRV8830 example",
+  "type": "certified",
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "chirimen-org",
+    "url": "https://github.com/chirimen-org/examples"
+  },
+  "icons": {
+    "128": "/style/icons/i2ctest-512.png"
+  }
+}
