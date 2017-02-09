@@ -1,8 +1,94 @@
-// @@@@@ webi2c-p2.js by D.F.Mac.
-// base : @MSakamaki : https://github.com/club-wot/WebGPIO (forked from Last Commit 6493b0d)
-//                     + https://github.com/club-wot/WebGPIO/pull/23 
+(function(){var ab2json = (dataBuffer) => JSON.parse(String.fromCharCode.apply(null, new Uint16Array(dataBuffer)));
+var json2ab = (jsonData) => {
+  var strJson = JSON.stringify(jsonData);
+  var buf = new ArrayBuffer(strJson.length * 2);
+  var uInt8Array = new Uint16Array(buf);
+  for (var i = 0, strLen = strJson.length; i < strLen; i++) {
+    uInt8Array[i] = strJson.charCodeAt(i);
+  }
 
-(function(){
+  return uInt8Array;
+};
+
+/**
+ * @example setting ovserve function
+ *   global.MockOvserve.observe('xxxxx_xxxxx_xxxxx', function(updateJson){
+ *     stateCtrl.setJsonData(updateJson);
+ *   });
+ *
+ * @example nofify method (parameter single only)
+ *   global.MockOvserve.notify('xxxxx_xxxxx_xxxxx', { param: 'PARAM' });
+ **/
+window.WorkerOvserve = window.WorkerOvserve || (function () {
+
+  function Ovserve() {
+    this._Map = new Map();
+  }
+
+  // set ovserver
+  Ovserve.prototype.observe = function (name, fnc) {
+    var funcs = this._Map.get(name) || [];
+    funcs.push(fnc);
+    this._Map.set(name, funcs);
+  };
+
+  // remove ovserver
+  Ovserve.prototype.unobserve = function (name, func) {
+    var funcs = this._Map.get(name) || [];
+    this._Map.set(name, funcs.filter(function (_func) {
+      return _func !== func;
+    }));
+  };
+
+  // notify ovserve
+  Ovserve.prototype.notify = function (name) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    /* istanbul ignore next */
+    (this._Map.get(name) || []).forEach(function (func, index) {
+      func.apply(null, args);
+    });
+  };
+
+  // delete map
+  // delete
+  Ovserve.prototype.delete = function (name) {
+    this._Map.delete(name);
+  };
+
+  return new Ovserve();
+})();
+
+const PORT_CONFIG = {
+  // https://docs.google.com/spreadsheets/d/1pVgK-Yy09p9PPgNgojQNLvsPjDFAOjOubgNsNYEQZt8/edit#gid=0
+  CHIRIMEN: {
+    PORTS: {
+      283: { portName: 'CN1.UART3_RX', pinName: '4', },
+      284: { portName: 'CN1.UART3_TX', pinName: '5', },
+      196: { portName: 'CN1.SPI0_CS',  pinName: '7', },
+      197: { portName: 'CN1.SPI0_CLK', pinName: '8', },
+      198: { portName: 'CN1.SPI0_RX',  pinName: '9', },
+      199: { portName: 'CN1.SPI0_TX',  pinName: '10', },
+      244: { portName: 'CN1.SPI1_CS',  pinName: '11', },
+      243: { portName: 'CN1.SPI1_CLK', pinName: '12', },
+      246: { portName: 'CN1.SPI1_RX',  pinName: '13', },
+      245: { portName: 'CN1.SPI1_TX',  pinName: '14', },
+      163: { portName: 'CN2.PWM0',     pinName: '10', },
+      193: { portName: 'CN2.UART0_TX', pinName: '13', },
+      192: { portName: 'CN2.UART0_RX', pinName: '14', },
+      353: { portName: 'CN2.GPIO6_A1', pinName: '15', },
+    },
+    I2C_PORTS: {
+        0: {
+          SDA: { portName: 'CN2.I2C0_SCL', pinName: '11', },
+          SCL: { portName: 'CN2.I2C0_SDA', pinName: '12', },
+        },
+        2: {
+          SDA: { portName: 'CN1.I2C2_SDA', pinName: '2', },
+          SCL: { portName: 'CN1.I2C2_SCL', pinName: '3', },
+        },
+      },
+  },
+};
 
 // document
 // https://rawgit.com/browserobo/WebI2C/master/index.html#navigator-I2C
@@ -68,9 +154,9 @@ I2CPort.prototype = {
   **/
   open: function (slaveAddress) {
     return new Promise((resolve, reject)=> {
-      new I2CSlaveDevice(this.portNumber, slaveAddress).then((i2cslave) =>{
+      new I2CSlaveDevice(this.portNumber, slaveAddress).then((i2cslave) => {
         resolve(i2cslave);
-      },(err) =>{
+      }, (err) => {
         reject(err);
       });
     });
@@ -89,9 +175,9 @@ var I2CPortMap = Map;
 
 function I2CSlaveDevice(portNumber, slaveAddress) {
   return new Promise((resolve, reject)=> {
-    this.init(portNumber, slaveAddress).then(() =>{
+    this.init(portNumber, slaveAddress).then(() => {
       resolve(this);
-    },(err) =>{
+    }, (err) => {
       reject(err);
     });
   });
@@ -111,23 +197,25 @@ I2CSlaveDevice.prototype = {
       });
 
       window.WorkerOvserve.observe(`i2c.setDeviceAddress.${this.portNumber}`, (data) => {
-        if(!data.error){
+        if (!data.error) {
           this.slaveDevice = data.slaveDevice;
           resolve(data.slaveDevice);
-        }else{
-          console.log("i2c.setDeviceAddress: error name:["+data.error.name+"]" );
+        }else {
+          console.log('i2c.setDeviceAddress: error name:[' + data.error.name + ']');
           reject(data.error);
         }
-        window.WorkerOvserve.delete(`i2c.setDeviceAddress.${this.portNumber}`); // @@@@@
+
+        window.WorkerOvserve.delete(`i2c.setDeviceAddress.${this.portNumber}`);
       });
     });
   },
 
-  getXid: function (){
-    this.xid ++;
-    if(this.xid > 999){
-      this.xid=0;
+  getXid: function () {
+    this.xid++;
+    if (this.xid > 999) {
+      this.xid = 0;
     }
+
     return this.xid;
   },
 
@@ -186,13 +274,14 @@ I2CSlaveDevice.prototype = {
       });
 
       window.WorkerOvserve.observe(`i2c.read.${transactionID}.${this.portNumber}.${this.slaveAddress}.${readRegistar}`, (data) => {
-        if(!data.error){
+        if (!data.error) {
           resolve(data.value);
-        }else{
-          console.log("i2c.read8: error name:["+data.error.name+"]" );
+        }else {
+          console.log('i2c.read8: error name:[' + data.error.name + ']');
           reject(data.error);
         }
-        window.WorkerOvserve.delete(`i2c.read.${transactionID}.${this.portNumber}.${this.slaveAddress}.${readRegistar}`); // @@@@@
+
+        window.WorkerOvserve.delete(`i2c.read.${transactionID}.${this.portNumber}.${this.slaveAddress}.${readRegistar}`);
       });
     });
   },
@@ -212,13 +301,14 @@ I2CSlaveDevice.prototype = {
       });
 
       window.WorkerOvserve.observe(`i2c.read.${transactionID}.${this.portNumber}.${this.slaveAddress}.${readRegistar}`, (data) => {
-        if(!data.error){
+        if (!data.error) {
           resolve(data.value);
-        }else{
-          console.log("i2c.read16: error name:["+data.error.name+"]" );
+        }else {
+          console.log('i2c.read16: error name:[' + data.error.name + ']');
           reject(data.error);
         }
-        window.WorkerOvserve.delete(`i2c.read.${transactionID}.${this.portNumber}.${this.slaveAddress}.${readRegistar}`); // @@@@@
+
+        window.WorkerOvserve.delete(`i2c.read.${transactionID}.${this.portNumber}.${this.slaveAddress}.${readRegistar}`);
       });
     });
   },
@@ -267,13 +357,14 @@ I2CSlaveDevice.prototype = {
       });
 
       window.WorkerOvserve.observe(`i2c.write.${transactionID}.${this.portNumber}.${this.slaveAddress}.${registerNumber}`, (data) => {
-        if(!data.error){
+        if (!data.error) {
           resolve(data.value);
-        }else{
-          console.log("i2c.write8: error name:["+data.error.name+"]" );
+        }else {
+          console.log('i2c.write8: error name:[' + data.error.name + ']');
           reject(data.error);
         }
-        window.WorkerOvserve.delete(`i2c.write.${transactionID}.${this.portNumber}.${this.slaveAddress}.${registerNumber}`); // @@@@@
+
+        window.WorkerOvserve.delete(`i2c.write.${transactionID}.${this.portNumber}.${this.slaveAddress}.${registerNumber}`);
       });
     });
   },
@@ -294,13 +385,14 @@ I2CSlaveDevice.prototype = {
       });
 
       window.WorkerOvserve.observe(`i2c.write.${transactionID}.${this.portNumber}.${this.slaveAddress}.${registerNumber}`, (data) => {
-        if(!data.error){
+        if (!data.error) {
           resolve(data.value);
-        }else{
-          console.log("i2c.write16: error name:["+data.error.name+"]" );
+        }else {
+          console.log('i2c.write16: error name:[' + data.error.name + ']');
           reject(data.error);
         }
-        window.WorkerOvserve.delete(`i2c.write.${transactionID}.${this.portNumber}.${this.slaveAddress}.${registerNumber}`); // @@@@@
+
+        window.WorkerOvserve.delete(`i2c.write.${transactionID}.${this.portNumber}.${this.slaveAddress}.${registerNumber}`);
       });
     });
   },
@@ -313,69 +405,6 @@ if (!navigator.requestI2CAccess) {
   };
 }
 
-var ab2json = (dataBuffer) => JSON.parse(String.fromCharCode.apply(null, new Uint16Array(dataBuffer)));
-var json2ab = (jsonData) => {
-  var strJson = JSON.stringify(jsonData);
-  var buf = new ArrayBuffer(strJson.length * 2);
-  var uInt8Array = new Uint16Array(buf);
-  for (var i = 0, strLen = strJson.length; i < strLen; i++) {
-    uInt8Array[i] = strJson.charCodeAt(i);
-  }
-
-  return uInt8Array;
-};
-
-/**
- * @example setting ovserve function
- *   global.MockOvserve.observe('xxxxx_xxxxx_xxxxx', function(updateJson){
- *     stateCtrl.setJsonData(updateJson);
- *   });
- *
- * @example nofify method (parameter single only)
- *   global.MockOvserve.notify('xxxxx_xxxxx_xxxxx', { param: 'PARAM' });
- **/
-window.WorkerOvserve = window.WorkerOvserve || (function () {
-
-  function Ovserve() {
-    this._Map = new Map();
-  }
-
-  // set ovserver
-  Ovserve.prototype.observe = function (name, fnc) {
-//    console.log("--- observe: name:"+name); // @@@@@
-    var funcs = this._Map.get(name) || [];
-    funcs.push(fnc);
-    this._Map.set(name, funcs);
-  };
-
-  // remove ovserver
-  Ovserve.prototype.unobserve = function (name, func) {
-//    console.log("--- unobserve: name:"+name); // @@@@@
-    var funcs = this._Map.get(name) || [];
-    this._Map.set(name, funcs.filter(function (_func) {
-      return _func !== func;
-    }));
-  };
-
-  // notify ovserve
-  Ovserve.prototype.notify = function (name) {
-    var args = Array.prototype.slice.call(arguments, 1);
-    /* istanbul ignore next */
-//    var cnt = 0;                       // @@@@@@
-    (this._Map.get(name) || []).forEach(function (func, index) {
-      func.apply(null, args);
-//      cnt ++;
-    });
-//    console.log("Map:"+cnt);          // @@@@@@
-  };
-
-  // delete
-  Ovserve.prototype.delete = function (name){
-    this._Map.delete(name);
-  }
-
-  return new Ovserve();
-})();
 
 /* istanbul ignore next */
 if (window.Worker && window.WorkerOvserve) {
@@ -392,7 +421,7 @@ if (window.Worker && window.WorkerOvserve) {
     }
   })();
 
-  var _worker = new Worker(`${current.substr(0, current.lastIndexOf('/'))}/worker.i2c-p2.js`);
+  var _worker = new Worker(`${current.substr(0, current.lastIndexOf('/'))}/worker.i2c.js`);
 
   // @MEMO gpioとi2cのObserverを分けた意味は「まだ」特にない
   window.WorkerOvserve.observe('gpio', function (jsonData) {
@@ -410,36 +439,4 @@ if (window.Worker && window.WorkerOvserve) {
     window.WorkerOvserve.notify(data.method, data);
   };
 }
-
-const PORT_CONFIG = {
-  // https://docs.google.com/spreadsheets/d/1pVgK-Yy09p9PPgNgojQNLvsPjDFAOjOubgNsNYEQZt8/edit#gid=0
-  CHIRIMEN: {
-    PORTS: {
-      283: { portName: 'CN1.UART3_RX', pinName: '4', },
-      284: { portName: 'CN1.UART3_TX', pinName: '5', },
-      196: { portName: 'CN1.SPI0_CS',  pinName: '7', },
-      197: { portName: 'CN1.SPI0_CLK', pinName: '8', },
-      198: { portName: 'CN1.SPI0_RX',  pinName: '9', },
-      199: { portName: 'CN1.SPI0_TX',  pinName: '10', },
-      244: { portName: 'CN1.SPI1_CS',  pinName: '11', },
-      243: { portName: 'CN1.SPI1_CLK', pinName: '12', },
-      246: { portName: 'CN1.SPI1_RX',  pinName: '13', },
-      245: { portName: 'CN1.SPI1_TX',  pinName: '14', },
-      163: { portName: 'CN2.PWM0',     pinName: '10', },
-      193: { portName: 'CN2.UART0_TX', pinName: '13', },
-      192: { portName: 'CN2.UART0_RX', pinName: '14', },
-      353: { portName: 'CN2.GPIO6_A1', pinName: '15', },
-    },
-    I2C_PORTS: {
-        0: {
-          SDA: { portName: 'CN2.I2C0_SCL', pinName: '11', },
-          SCL: { portName: 'CN2.I2C0_SDA', pinName: '12', },
-        },
-        2: {
-          SDA: { portName: 'CN1.I2C2_SDA', pinName: '2', },
-          SCL: { portName: 'CN1.I2C2_SCL', pinName: '3', },
-        },
-      },
-  },
-};
 })()
