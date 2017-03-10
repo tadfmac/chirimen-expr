@@ -71,10 +71,10 @@ window.addEventListener('DOMContentLoaded', function() {
         }
         if (command == 1){
           console.log(command);
-          lP1.write(1);
-          lP2.write(0);
-          rP1.write(0);
-          rP2.write(1);
+          lP1.write(0);
+          lP2.write(1);
+          rP1.write(1);
+          rP2.write(0);
           motorStop(2000);
         }
         if (command == 2){
@@ -83,7 +83,7 @@ window.addEventListener('DOMContentLoaded', function() {
           lP2.write(1);
           rP1.write(0);
           rP2.write(1);
-          motorStop(2000);
+          motorStop(1000);
         }
         if (command == 3){
           console.log(command);
@@ -91,14 +91,14 @@ window.addEventListener('DOMContentLoaded', function() {
           lP2.write(0);
           rP1.write(1);
           rP2.write(0);
-          motorStop(2000);
+          motorStop(1000);
         }
         if (command == 4){
           console.log(command);
-          lP1.write(0);
-          lP2.write(1);
-          rP1.write(1);
-          rP2.write(0);
+          lP1.write(1);
+          lP2.write(0);
+          rP1.write(0);
+          rP2.write(1);
           motorStop(2000);
         }
       });
