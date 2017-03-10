@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "name": "TA7291P Demo",
+  "description": "Demonstrates how to use permissions to load remote content",
+  "launch_path": "/index.html",
+  "icons": {
+    "512": "/img/icons/ta7291p-demo-512.png"
+  },
+  "developer": {
+    "name": "Your name",
+    "url": "http://example.com"
+  },
+  "default_locale": "en"
+}
