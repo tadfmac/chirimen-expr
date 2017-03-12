@@ -2,7 +2,7 @@
 
 Web APIから利用可能な機能にフォーカスしたGPIOマップです。
 
-![GPIO配置図](./chirimen-pin-mapping-CMN2015-1_B2GOS-20160808.png)
+![GPIO配置図](./chirimen-pin-mapping-CMN2015-1_B2GOS-20170301.png)
 
 ### Licence
 
